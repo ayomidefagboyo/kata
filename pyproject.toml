@@ -1,0 +1,12 @@
+[project]
+name = "kata"
+version = "1.0.0"
+description = "Kata — Autonomous Perpetual Futures Agent"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.vercel]
+entrypoint = "kata.main:app"
+
+[tool.vercel.fastapi.static]
+exclude = false
