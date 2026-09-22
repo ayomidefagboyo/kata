@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kata — Autonomous Perpetual Futures Agent</title>
+  <meta name="description" content="Autonomous perpetual futures agent that learns from its own closed trades. Built on calibrated confidence floors, EV vetoes, and idempotent execution across Hyperliquid and Solana Drift.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Top Telemetry Strip -->
+  <aside class="telemetry-strip" aria-label="System Telemetry">
+    <div class="telemetry-group">
+      <div class="telemetry-item">
+        <span class="live-pulse" id="pilot-pulse"></span>
+        <span>PILOT: <strong id="pilot-name">YUKI (Aggressive Perps)</strong></span>
+      </div>
+      <div class="telemetry-item">
+        <span>VENUE: <strong id="active-venue-badge" class="badge badge-venue">Hyperliquid L1</strong></span>
+      </div>
+      <div class="telemetry-item">
+        <span>REGIME: <strong id="regime-text">STRONG_UPTREND</strong></span>
+      </div>
+    </div>
+    <div class="telemetry-group">
+      <div class="telemetry-item">
+        <span>CONFIDENCE FLOOR: <strong id="conf-floor-val">60.0%</strong></span>
+      </div>
+      <div class="telemetry-item">
+        <span>LEARNING STATUS: <strong class="badge badge-profit" id="learning-badge">Level 1+2+3 Active</strong></span>
+      </div>
+      <div class="telemetry-item">
+        <span>WS: <strong id="ws-status" style="color: var(--profit-green);">CONNECTED</strong></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Application Header -->
+  <header class="app-header">
+    <div class="container nav-wrapper">
+      <a href="/" class="brand">
+        <div class="brand-icon">⚔</div>
+        <div class="brand-text">
+          <h1>KATA</h1>
+          <p>Closed-Loop Perpetual Agent</p>
+        </div>
+      </a>
+      <div class="nav-actions">
+        <button class="btn btn-secondary" id="open-alloc-btn">
+          <span>⚡ Allocate Capital</span>
+        </button>
+        <button class="btn btn-primary" id="connect-wallet-btn">
+          <span id="wallet-btn-text">Connect Wallet</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+
+    <!-- Cockpit Hero Section -->
+    <section class="cockpit-section" aria-label="Agent Telemetry Cockpit">
+      <div class="hero-grid">
+        
+        <!-- KPI 1 -->
+        <article class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Account Equity</span>
+            <span class="badge badge-venue" id="venue-chip">Hyperliquid</span>
+          </div>
+          <div class="kpi-value" id="kpi-equity">$32,450.00</div>
+          <div class="kpi-subtext">
+            <span class="text-profit" id="kpi-equity-pnl">+14.2% 24h</span>
+            <span>(+$4,120.00 net)</span>
+          </div>
+        </article>
+
+        <!-- KPI 2 -->
+        <article class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Win Rate & Factor</span>
+            <span class="badge badge-profit" id="resolved-count">76 Closed</span>
+          </div>
+          <div class="kpi-value" id="kpi-winrate">68.4%</div>
+          <div class="kpi-subtext">
+            <span>Profit Factor:</span>
+            <strong class="text-profit" id="kpi-profit-factor">2.41</strong>
+            <span>(52W / 24L)</span>
+          </div>
+        </article>
+
+        <!-- KPI 3 -->
+        <article class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Net Expected Value (EV)</span>
+            <span class="badge badge-profit">Walk-Forward</span>
+          </div>
+          <div class="kpi-value" id="kpi-ev">+2.84%</div>
+          <div class="kpi-subtext">
+            <span>Per Trade Expectancy</span>
+            <span class="text-profit">(+8.2% vs Raw)</span>
+          </div>
+        </article>
+
+        <!-- KPI 4 -->
+        <article class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-title">Downstream Vetoes</span>
+            <span class="badge badge-veto">Statistical Gate</span>
+          </div>
+          <div class="kpi-value" id="kpi-vetoes">18 Blocked</div>
+          <div class="kpi-subtext">
+            <span class="text-profit" id="kpi-drawdown-saved">-$3,840 Saved Drawdown</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Two-Column Grid: Agent Brain & Veto Feed -->
+    <section class="dashboard-grid" aria-label="Live Operations">
+
+      <!-- Left Column: Agent Brain ReAct Terminal -->
+      <div class="terminal-card">
+        <div class="terminal-topbar">
+          <div class="terminal-dots">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+          </div>
+          <div class="terminal-title">
+            <span>🧠 LIVE REACT AGENT REASONING STREAM</span>
+          </div>
+          <div class="terminal-tabs">
+            <button class="terminal-tab-btn active" data-filter="all">All</button>
+            <button class="terminal-tab-btn" data-filter="execute">Orders</button>
+            <button class="terminal-tab-btn" data-filter="ev-gate">EV Vetoes</button>
+          </div>
+        </div>
+        <div class="terminal-body" id="react-terminal">
+          <!-- Terminal logs injected dynamically -->
+        </div>
+      </div>
+
+      <!-- Right Column: Downstream Veto Feed -->
+      <div class="card-wrapper">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span>🛡️ Downstream Veto Feed</span>
+          </h2>
+          <span class="badge badge-veto" id="veto-badge-count">18 Signals Rejected</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Raw model proposals vetoed downstream by calibrated EV floors and trend alignment gates:
+        </p>
+        <div class="veto-list" id="veto-list-container">
+          <!-- Veto cards injected dynamically -->
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Public Verifiable Track Record -->
+    <section class="table-card" aria-label="Closed Trades Track Record">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">📊 Public Verifiable Track Record</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Realized perpetual outcomes fed back into Kata's parameter optimization matrix.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="badge badge-venue filter-btn active" data-venue="all">All Venues</button>
+          <button class="badge badge-venue filter-btn" data-venue="hyperliquid">Hyperliquid</button>
+          <button class="badge badge-venue filter-btn" data-venue="drift">Drift (Solana)</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="track-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>Asset</th>
+              <th>Side / Lev</th>
+              <th>Entry Price</th>
+              <th>Exit Price</th>
+              <th>Realized P&L</th>
+              <th>Initial Conf</th>
+              <th>EV Score</th>
+              <th>Venue Proof</th>
+            </tr>
+          </thead>
+          <tbody id="track-record-body">
+            <!-- Trades injected dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Multi-Level Learning Matrix -->
+    <section class="learning-section" aria-label="Multi-Level Learning Loops">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🧠 Multi-Level Learning Architecture</h2>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;">
+            Continuous adaptation moving parameters downstream of every closed position.
+          </p>
+        </div>
+      </div>
+      <div class="matrix-grid">
+        
+        <!-- Level 1 -->
+        <div class="matrix-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3>Level 1: Real-Time</h3>
+            <span class="badge badge-profit">Every 30s</span>
+          </div>
+          <p>Immediate feedback loop tracking active positions, MFE/MAE excursions, and trailing invalidations.</p>
+          <div class="matrix-stat-row">
+            <span>Feedback Horizon</span>
+            <strong>0 - 5 Minutes</strong>
+          </div>
+          <div class="matrix-stat-row">
+            <span>Trailing Stop Drift</span>
+            <strong class="text-profit">+0.85% Dynamic</strong>
+          </div>
+          <div class="matrix-stat-row">
+            <span>Regime Shift Tripwire</span>
+            <strong style="color: var(--accent-hyper);">Active (3.0% EMA)</strong>
+          </div>
+        </div>
+
+        <!-- Level 2 -->
+        <div class="matrix-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3>Level 2: Pattern Matrix</h3>
+            <span class="badge badge-venue">Every 15m</span>
+          </div>
+          <p>Multi-dimensional clustering across RSI states, volatility buckets, and setup archetypes.</p>
+          <div class="matrix-stat-row">
+            <span>Tracked Patterns</span>
+            <strong>24 Active Setups</strong>
+          </div>
+          <div class="matrix-stat-row">
+            <span>Top Performing</span>
+            <strong class="text-profit">Breakout Long (78%)</strong>
+          </div>
+          <div class="matrix-stat-row">
+            <span>Haircut Setups</span>
+            <strong class="text-loss">Mean Rev Short (-18%)</strong>
+          </div>
+        </div>
+
+        <!-- Level 3 -->
+        <div class="matrix-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <h3>Level 3: Meta-Learning</h3>
+            <span class="badge badge-veto">Daily</span>
+          </div>
+          <p>Walk-forward logistic policy retraining, prompt strategy tuning, and confidence floor optimization.</p>
+          <div class="matrix-stat-row">
+            <span>Policy Status</span>
+            <strong class="text-profit">Validated (Passed)</strong>
+          </div>
+          <div class="matrix-stat-row">
+            <span>Calibrated Floor</span>
+            <strong>60.0% Hard Floor</strong>
+          </div>
+          <div class="matrix-stat-row">
+            <span>Convergence Rate</span>
+            <strong style="color: #c084fc;">94.2% Stable</strong>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Capital Allocation & Risk Modal -->
+  <div class="modal-backdrop" id="alloc-modal" role="dialog" aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>⚡ Allocate Capital to Kata</h2>
+        <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+      </div>
+      <form id="alloc-form">
+        <div class="form-group">
+          <label class="form-label" for="alloc-amount">Allocation Amount (USDC)</label>
+          <input type="number" id="alloc-amount" class="form-input" value="5000" min="10" step="10" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="target-venue">Target Execution Venue</label>
+          <select id="target-venue" class="form-input">
+            <option value="hyperliquid" selected>Hyperliquid L1 (Live Perp Venue)</option>
+            <option value="drift">Drift Protocol (Solana Native)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Leverage Limit: <span class="slider-val" id="lev-val">3x</span></label>
+          <div class="slider-group">
+            <input type="range" id="lev-slider" min="1" max="10" value="3" step="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max Position Sizing: <span class="slider-val" id="size-val">15%</span></label>
+          <div class="slider-group">
+            <input type="range" id="size-slider" min="5" max="30" value="15" step="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hard Stop-Loss Ceiling: <span class="slider-val" id="sl-val">3%</span></label>
+          <div class="slider-group">
+            <input type="range" id="sl-slider" min="1" max="10" value="3" step="0.5">
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem; margin-top: 1.75rem;">
+          <button type="submit" class="btn btn-primary" style="flex: 1;">
+            <span>Authorize & Deploy Allocation</span>
+          </button>
+          <button type="button" class="btn btn-outline-danger" id="panic-btn" title="Cancel open orders and close positions">
+            <span>Emergency Pause</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

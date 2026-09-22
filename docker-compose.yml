@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kata-web
+    restart: unless-stopped
+    command: ["web"]
+    ports:
+      - "${PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  signals-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kata-signals-worker
+    restart: unless-stopped
+    command: ["signals-worker"]
+    env_file:
+      - .env
+    depends_on:
+      web:
+        condition: service_healthy
+
+  learning-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kata-learning-worker
+    restart: unless-stopped
+    command: ["learning-worker"]
+    env_file:
+      - .env
+    depends_on:
+      web:
+        condition: service_healthy

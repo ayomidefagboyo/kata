@@ -1,0 +1,74 @@
+services:
+  # FastAPI Web Service & Cockpit UI
+  - type: web
+    name: kata-agent-web
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python start.py web
+    healthCheckPath: /health
+    plan: starter
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.10"
+      - key: PORT
+        value: "8000"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: HYPERLIQUID_API_URL
+        value: "https://api.hyperliquid.xyz"
+      - key: HYPERLIQUID_ACCOUNT_ADDRESS
+        sync: false
+      - key: HYPERLIQUID_SECRET_KEY
+        sync: false
+      - key: DEFAULT_VENUE
+        value: "hyperliquid"
+      - key: LLM_PROVIDER
+        value: "deepseek"
+      - key: DEEPSEEK_API_KEY
+        sync: false
+
+  # Multi-Level Learning Worker (30s, 15m, 24h loops)
+  - type: worker
+    name: kata-learning-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python start.py learning-worker
+    plan: starter
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.10"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: "deepseek"
+      - key: DEEPSEEK_API_KEY
+        sync: false
+
+  # Platform Signals Worker (Market Scanner)
+  - type: worker
+    name: kata-signals-worker
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python start.py signals-worker
+    plan: starter
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.10"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: "deepseek"
+      - key: DEEPSEEK_API_KEY
+        sync: false

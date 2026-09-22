@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+keypair*.json
+wallet*.json
+
+# Logs / local state
+*.log
+.DS_Store
+
+# Node (web client)
+node_modules/
+dist/

@@ -1,0 +1,75 @@
+# Core FastAPI dependencies
+fastapi>=0.110.0
+uvicorn>=0.27.0
+python-multipart>=0.0.9
+pydantic>=2.6.0
+pydantic-settings>=2.2.1
+httpx>=0.28.1,<0.29
+python-dotenv>=1.0.0
+aiofiles>=24.1.0
+jinja2>=3.1.3
+
+# Database
+supabase>=2.7.0
+asyncpg>=0.29.0
+sqlalchemy[asyncio]>=2.0.23
+alembic>=1.13.1
+
+# AI and ML APIs
+anthropic>=0.72.0
+openai>=1.60.0
+
+# Trading and Market Data
+ccxt==4.1.77
+pandas>=2.2.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+python-dateutil==2.8.2
+hyperliquid-python-sdk>=0.24.0
+
+# Networking and Communication
+requests>=2.32.0
+websockets>=12.0
+asyncio-mqtt>=0.16.1
+
+# Queues and Caching
+celery>=5.4.0
+redis>=5.1.0
+redis[asyncio]>=5.1.0
+aioredis>=2.0.1
+aiolimiter>=1.1.0
+clickhouse-connect>=0.6.23
+
+# Scheduling
+schedule>=1.2.2
+
+# Additional utilities
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+beautifulsoup4>=4.12.2
+certifi>=2024.8.30
+web3>=7.0.0
+python-binance>=1.0.19
+Pillow>=10.4.0
+aiohttp>=3.10.11
+
+# Authentication and Wallet Integration
+PyJWT>=2.8.0
+cryptography>=42.0.0
+ecdsa>=0.18.0
+privy-client>=0.5.0
+canonicaljson>=2.0.0
+
+# News and Social Media APIs (temporarily disabled due to deployment issues)
+# newsapi-python>=0.2.7
+# tweepy>=4.14.0
+# praw>=7.7.1
+# textblob>=0.18.0
+
+# Deployment
+gunicorn>=23.0.0
+
+# Solana / Drift (Week 2)
+# driftpy>=0.8.0
+# solana>=0.34.0
+# anchorpy>=0.20.0
