@@ -3,6 +3,9 @@
   "functions": {
     "kata/main.py": {
       "maxDuration": 60
+    },
+    "main.py": {
+      "maxDuration": 60
     }
   }
 }

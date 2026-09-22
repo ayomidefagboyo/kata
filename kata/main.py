@@ -1,6 +1,5 @@
 """
-FastAPI main application for Flow AI Trading Platform backend.
-Updated: Fixed CORS and API endpoint issues for production deployment.
+FastAPI main application for Kata Autonomous Perpetual Futures Agent backend.
 """
 import logging
 import asyncio
@@ -236,12 +235,12 @@ def _register_routers():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan manager."""
-    logger.info("Starting Flow AI Trading Platform backend...")
+    logger.info("Starting Kata Autonomous Agent backend...")
 
     # Mount routers before serving traffic so a deployment cannot come up
     # "healthy" while missing the actual API surface.
     try:
-        await asyncio.to_thread(_register_routers)
+        _register_routers()
     except Exception:
         logger.exception("Router registration failed during startup")
         raise
@@ -259,7 +258,7 @@ async def lifespan(app: FastAPI):
     yield
     
     # Shutdown
-    logger.info("Shutting down Flow AI Trading Platform backend...")
+    logger.info("Shutting down Kata Autonomous Agent backend...")
 
     # Shut down Hyperliquid WebSocket stream manager
     try:
@@ -316,6 +315,9 @@ app.add_middleware(
 
 # Mount static files for the Kata Cockpit web client
 client_dir = Path(__file__).resolve().parent.parent / "client"
+if not client_dir.exists():
+    client_dir = Path.cwd() / "client"
+
 if client_dir.exists():
     app.mount("/static", StaticFiles(directory=str(client_dir)), name="static")
 

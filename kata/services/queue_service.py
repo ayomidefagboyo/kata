@@ -54,13 +54,7 @@ class QueueService:
     """High-performance queue service for token discovery."""
     
     def __init__(self):
-        self.queues = {
-            QueuePriority.LOW: asyncio.Queue(maxsize=1000),
-            QueuePriority.NORMAL: asyncio.Queue(maxsize=2000),
-            QueuePriority.HIGH: asyncio.Queue(maxsize=1000),
-            QueuePriority.URGENT: asyncio.Queue(maxsize=500)
-        }
-        
+        self._queues = None
         self.processing_tasks = {}
         self.completed_tasks = {}
         self.failed_tasks = {}
@@ -79,6 +73,22 @@ class QueueService:
         self.is_running = False
         
         logger.info("🚀 Queue service initialized")
+
+    @property
+    def queues(self):
+        """Lazy queue initialization to ensure an active event loop exists."""
+        if self._queues is None:
+            self._queues = {
+                QueuePriority.LOW: asyncio.Queue(maxsize=1000),
+                QueuePriority.NORMAL: asyncio.Queue(maxsize=2000),
+                QueuePriority.HIGH: asyncio.Queue(maxsize=1000),
+                QueuePriority.URGENT: asyncio.Queue(maxsize=500)
+            }
+        return self._queues
+
+    @queues.setter
+    def queues(self, value):
+        self._queues = value
     
     async def start_workers(self, worker_count: int = 5):
         """Start background worker processes."""
