@@ -87,7 +87,7 @@ class LiFiBridgeService:
             headers=headers,
         )
 
-        # Floww's first safe universal funding routes. Keep this explicit so
+        # Kata's first safe universal funding routes. Keep this explicit so
         # unsupported source assets are not misquoted as native ETH.
         self.chains = {
             "ethereum": {
@@ -145,7 +145,7 @@ class LiFiBridgeService:
         return self.chain_aliases.get(chain_key, chain_key)
 
     def get_configured_chains(self) -> List[Dict[str, Any]]:
-        """Return source chains Floww can safely quote for ETH funding today."""
+        """Return source chains Kata can safely quote for ETH funding today."""
         return [
             {
                 "id": config["id"],

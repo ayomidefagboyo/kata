@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Kata</title>
+  <desc id="desc">A calm K monogram for a disciplined autonomous trading agent.</desc>
+  <rect x="28" y="28" width="456" height="456" rx="120" fill="#12202F"/>
+  <rect x="29" y="29" width="454" height="454" rx="119" fill="none" stroke="#385268" stroke-width="2"/>
+  <path d="M164 126V386" fill="none" stroke="#F6F4ED" stroke-linecap="round" stroke-width="50"/>
+  <path d="M186 256L334 126" fill="none" stroke="#77DFC0" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+  <path d="M186 256L338 386" fill="none" stroke="#F6F4ED" stroke-linecap="round" stroke-linejoin="round" stroke-width="50"/>
+</svg>

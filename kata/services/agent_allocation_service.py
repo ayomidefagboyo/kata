@@ -2767,7 +2767,7 @@ class AgentAllocationService:
                 "remaining_amount": new_remaining,
                 "status": next_status,
                 "message": (
-                    f"Returning ${amount:.2f} from Solana to Floww Balance on Base"
+                    f"Returning ${amount:.2f} from Solana to Kata Balance on Base"
                     if ryu_return
                     else f"Released ${amount:.2f} Base USDC to your available balance"
                 ),
@@ -5484,7 +5484,7 @@ class AgentAllocationService:
         wallet_address: str,
     ) -> Dict[str, Any]:
         """
-        Withdraw USDC from the user's Hyperliquid account back to their Floww
+        Withdraw USDC from the user's Hyperliquid account back to their Kata
         wallet on Arbitrum.
 
         Uses Hyperliquid's native withdraw3 action signed by the delegated
@@ -5498,7 +5498,7 @@ class AgentAllocationService:
 
         try:
             if not wallet_address:
-                return {"success": False, "error": "No Floww wallet address found for this user"}
+                return {"success": False, "error": "No Kata wallet address found for this user"}
             if amount < MIN_WITHDRAWAL_USDC:
                 return {
                     "success": False,
@@ -5596,7 +5596,7 @@ class AgentAllocationService:
                 "destination": wallet_address,
                 "estimated_arrival_minutes": 5,
                 "message": (
-                    f"Withdrawing ${amount:.2f} USDC to your Floww wallet on Arbitrum. "
+                    f"Withdrawing ${amount:.2f} USDC to your Kata wallet on Arbitrum. "
                     f"Hyperliquid deducts a $1 fee; funds arrive in about 5 minutes."
                 ),
             }
@@ -5968,7 +5968,7 @@ class AgentAllocationService:
                         "positions_closed": liquidation.get("closed", 0),
                         "transaction_hash": returned.get("transaction_hash"),
                         "estimated_base_usdc": returned.get("estimated_base_usdc"),
-                        "message": "Ryu stopped and is returning USDC to Floww Balance on Base",
+                        "message": "Ryu stopped and is returning USDC to Kata Balance on Base",
                     }
 
             result = (

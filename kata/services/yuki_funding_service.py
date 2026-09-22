@@ -8,7 +8,7 @@ the platform authorization key the user delegated to.
 
 Steps per execution:
 1. convert       - swap/bridge ETH into Arbitrum USDC via the live LiFi route
-2. arrival       - wait for Arbitrum USDC to land in the user's Floww wallet
+2. arrival       - wait for Arbitrum USDC to land in the user's Kata wallet
 3. deposit       - transfer Arbitrum USDC to the Hyperliquid bridge
 4. credit        - wait for Hyperliquid to credit the account balance
 
@@ -186,7 +186,7 @@ class YukiFundingService:
             return {"success": False, "error": f"Unsupported source_chain. Supported: {sorted(CHAIN_CONFIG)}"}
 
         if not wallet_address or not wallet_address.startswith("0x"):
-            return {"success": False, "error": "A valid Floww wallet address is required"}
+            return {"success": False, "error": "A valid Kata wallet address is required"}
 
         # A pending run for the same wallet must finish before starting another.
         for existing in self.executions.values():
@@ -451,7 +451,7 @@ class YukiFundingService:
         transaction: Dict[str, Any],
     ) -> str:
         """Send a transaction from the user's embedded wallet via Privy session-signer RPC."""
-        # Legacy delegated funding is retained for recovery only. Floww never
+        # Legacy delegated funding is retained for recovery only. Kata never
         # sponsors its gas; the active UI uses Circle Paymaster and charges the
         # user's USDC directly.
         return await self._privy_wallet_rpc(wallet_id, chain_id, transaction)

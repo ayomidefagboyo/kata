@@ -56,7 +56,7 @@ from kata.services.privy_signing_service import get_privy_signing_service
 
 logger = logging.getLogger(__name__)
 
-# Floww deposits and idle Ryu capital remain Base USDC. A cross-chain buy moves
+# Kata deposits and idle Ryu capital remain Base USDC. A cross-chain buy moves
 # only that position's amount to the destination token and can carve out a
 # user-owned destination gas reserve through LI.Fuel.
 BASE_CHAIN_ID = 8453
@@ -2246,7 +2246,7 @@ class RyuSpotTradingService:
         base_balances = {"eth": 0.0, "usdc": 0.0}
         solana_balances = {"sol": 0.0, "usdc": 0.0}
         if not ethereum_wallet_address:
-            blocking_reasons.append("Floww Base wallet is unavailable")
+            blocking_reasons.append("Kata Base wallet is unavailable")
         else:
             try:
                 base_balances = await self.get_base_balances(
@@ -2254,7 +2254,7 @@ class RyuSpotTradingService:
                 )
             except Exception as e:
                 logger.warning(f"Could not read Ryu Base balances: {e}")
-                blocking_reasons.append("Floww Balance is temporarily unavailable")
+                blocking_reasons.append("Kata Balance is temporarily unavailable")
         if not solana_wallet_address:
             blocking_reasons.append("Ryu Solana wallet is unavailable")
         else:

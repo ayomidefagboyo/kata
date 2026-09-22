@@ -1,0 +1,22 @@
+{
+  "name": "Kata — Autonomous Perpetual Agent",
+  "short_name": "Kata",
+  "description": "Effortless autonomous crypto investing for everyone. Self-learning perpetual futures agent with calibrated risk floors.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07080B",
+  "theme_color": "#102A35",
+  "icons": [
+    {
+      "src": "/static/brand/kata-mark-alt.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/brand/kata-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

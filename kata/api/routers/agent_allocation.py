@@ -184,10 +184,10 @@ class YukiEthFundingPlanRequest(BaseModel):
         default=0.002,
         ge=0.0001,
         le=0.05,
-        description="ETH to keep in the Floww wallet for Arbitrum gas"
+        description="ETH to keep in the Kata wallet for Arbitrum gas"
     )
     source_chain: str = Field(default="arbitrum", description="Source chain for ETH funding")
-    wallet_address: Optional[str] = Field(default=None, description="Floww platform wallet address for quote routing")
+    wallet_address: Optional[str] = Field(default=None, description="Kata platform wallet address for quote routing")
 
 
 class YukiEthFundingPlanResponse(BaseModel):
@@ -219,14 +219,14 @@ class YukiEthFundingExecuteRequest(BaseModel):
         default=0.002,
         ge=0.0001,
         le=0.05,
-        description="ETH to keep in the Floww wallet for source-chain gas"
+        description="ETH to keep in the Kata wallet for source-chain gas"
     )
     source_chain: str = Field(default="arbitrum", description="Source chain holding the funded ETH")
-    wallet_address: Optional[str] = Field(default=None, description="Floww platform wallet address")
+    wallet_address: Optional[str] = Field(default=None, description="Kata platform wallet address")
 
 
 class YukiWithdrawRequest(BaseModel):
-    """Withdraw USDC from Hyperliquid back to the user's Floww wallet."""
+    """Withdraw USDC from Hyperliquid back to the user's Kata wallet."""
     amount: float = Field(..., gt=0, description="USDC amount to withdraw (Hyperliquid deducts a $1 fee)")
 
 
@@ -388,7 +388,7 @@ async def get_yuki_eth_funding_plan(
 
     wallet_address = request.wallet_address or user.get("wallet_address")
     if not wallet_address:
-        raise HTTPException(status_code=400, detail="Floww wallet address is required for a funding quote")
+        raise HTTPException(status_code=400, detail="Kata wallet address is required for a funding quote")
 
     gas_reserve_eth = request.gas_reserve_eth if source_chain == "arbitrum" else 0.0
     # eth_amount is the NET amount to convert for Yuki. The gas reserve is kept
@@ -397,13 +397,13 @@ async def get_yuki_eth_funding_plan(
     eth_to_convert = request.eth_amount
     source_label = _format_chain_name(source_chain)
 
-    # This plan is built from ETH already sitting in the user's Floww Wallet
+    # This plan is built from ETH already sitting in the user's Kata Wallet
     # (the same balance the funding UI reads), not funds still to be sent.
     base_steps = [
         {
             "step": 1,
-            "title": f"Use ETH from your Floww Wallet on {source_label}",
-            "description": f"{eth_to_convert:.6f} ETH from your Floww Wallet goes to Yuki.",
+            "title": f"Use ETH from your Kata Wallet on {source_label}",
+            "description": f"{eth_to_convert:.6f} ETH from your Kata Wallet goes to Yuki.",
             "asset": "ETH",
             "amount": eth_to_convert,
         },
@@ -413,7 +413,7 @@ async def get_yuki_eth_funding_plan(
             "step": 2,
             "title": "Reserve ETH for Arbitrum gas",
             "description": (
-                f"Floww keeps {gas_reserve_eth:.6f} ETH available for Arbitrum gas "
+                f"Kata keeps {gas_reserve_eth:.6f} ETH available for Arbitrum gas "
                 "needed to swap and deposit USDC."
             ),
             "asset": "ETH",
@@ -424,7 +424,7 @@ async def get_yuki_eth_funding_plan(
             "step": 2,
             "title": f"Reserve {source_label} ETH for gas",
             "description": (
-                f"Floww keeps enough ETH on {source_label} to pay network gas, then "
+                f"Kata keeps enough ETH on {source_label} to pay network gas, then "
                 "routes the rest to Arbitrum USDC for Yuki."
             ),
             "asset": "ETH",
@@ -464,7 +464,7 @@ async def get_yuki_eth_funding_plan(
                 "title": "Deposit USDC to Hyperliquid",
                 "description": (
                     "Only Arbitrum USDC is deposited to Hyperliquid. After the deposit lands, "
-                    "Floww checks the Hyperliquid balance before activating Yuki."
+                    "Kata checks the Hyperliquid balance before activating Yuki."
                 ),
                 "asset": "USDC",
                 "amount": estimated_usdc,
@@ -490,7 +490,7 @@ async def get_yuki_eth_funding_plan(
             steps=steps,
             warning=(
                 "Do not send ETH directly to Hyperliquid's Arbitrum USDC deposit path. "
-                "Yuki trades with USDC collateral; Floww must route ETH into Arbitrum USDC first."
+                "Yuki trades with USDC collateral; Kata must route ETH into Arbitrum USDC first."
             ),
         )
 
@@ -517,7 +517,7 @@ async def execute_yuki_eth_funding(
     """
     Execute the previewed ETH funding route for Yuki.
 
-    Runs the full pipeline from the user's delegated Floww wallet: convert ETH to
+    Runs the full pipeline from the user's delegated Kata wallet: convert ETH to
     Arbitrum USDC via the live LiFi route, then deposit the USDC to Hyperliquid.
     Progress is tracked per step and can be polled via the executions endpoint.
     """
@@ -525,7 +525,7 @@ async def execute_yuki_eth_funding(
 
     wallet_address = request.wallet_address or user.get("wallet_address")
     if not wallet_address:
-        raise HTTPException(status_code=400, detail="Floww wallet address is required to execute funding")
+        raise HTTPException(status_code=400, detail="Kata wallet address is required to execute funding")
 
     try:
         result = await get_yuki_funding_service().start_funding(
@@ -603,10 +603,10 @@ async def withdraw_from_hyperliquid(
     user: Dict[str, Any] = Depends(get_current_user)
 ):
     """
-    Withdraw USDC from the user's Hyperliquid account to their Floww wallet.
+    Withdraw USDC from the user's Hyperliquid account to their Kata wallet.
 
     Signed with the delegated wallet via Hyperliquid's native withdrawal;
-    Arbitrum USDC lands in the Floww wallet in about 5 minutes ($1 fee).
+    Arbitrum USDC lands in the Kata wallet in about 5 minutes ($1 fee).
     Allocation records are reduced to match the remaining balance.
     """
     try:

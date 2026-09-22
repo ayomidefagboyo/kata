@@ -567,7 +567,7 @@ class Settings(BaseSettings):
     )
     YUKI_FUNDING_SPONSOR_GAS: bool = Field(
         default=False,
-        description="Deprecated and ignored. Floww never sponsors funding gas.",
+        description="Deprecated and ignored. Kata never sponsors funding gas.",
     )
     HYPERLIQUID_BRIDGE_ADDRESS: str = Field(
         default="0x2Df1c51E09aECF9cacB7bc98cB1742757f163dF7",
@@ -575,7 +575,7 @@ class Settings(BaseSettings):
     )
     HYPERLIQUID_BUILDER_ADDRESS: Optional[str] = Field(
         default=None,
-        description="Floww builder-code wallet address for per-order revenue. Unset disables builder fees.",
+        description="Kata builder-code wallet address for per-order revenue. Unset disables builder fees.",
     )
     HYPERLIQUID_BUILDER_FEE_TENTH_BPS: int = Field(
         default=10,
@@ -732,8 +732,9 @@ class Settings(BaseSettings):
             "http://127.0.0.1:8001",  # Backend API server alternative
             
             # Production domains
-            "https://tryfloww.app",                  # Custom domain
-            "https://www.tryfloww.app",              # Custom domain with www
+            "https://kata.trade",                      # Custom domain
+            "https://www.kata.trade",                  # Custom domain with www
+            "https://app.kata.trade",                  # Web app domain
             
             # Dynamic frontend URL from env
             self.FRONTEND_URL,

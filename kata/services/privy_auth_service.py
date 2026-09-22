@@ -129,7 +129,7 @@ class PrivyAuthService:
                         linked_account.chain_type == 'ethereum'):
                         ethereum_wallets.append(linked_account)
 
-                # Base deposits and agent funding use the embedded Floww
+                # Base deposits and agent funding use the embedded Kata
                 # wallet. An external login wallet can appear first in Privy's
                 # linked-account list, and Ryu adds a second chain-specific
                 # wallet, so account ordering is not a safe selector.

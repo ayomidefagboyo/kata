@@ -1243,7 +1243,7 @@ class UnifiedSignalGenerator:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 resp = await client.get(
                     "https://api.coingecko.com/api/v3/global",
-                    headers={"Accept": "application/json", "User-Agent": "floww-signals/1.0"},
+                    headers={"Accept": "application/json", "User-Agent": "kata-signals/1.0"},
                 )
                 if resp.status_code == 200:
                     payload = resp.json()
@@ -1262,7 +1262,7 @@ class UnifiedSignalGenerator:
             async with httpx.AsyncClient(timeout=10.0) as client:
                 resp = await client.get(
                     "https://api.coinpaprika.com/v1/global",
-                    headers={"Accept": "application/json", "User-Agent": "floww-signals/1.0"},
+                    headers={"Accept": "application/json", "User-Agent": "kata-signals/1.0"},
                 )
                 if resp.status_code == 200:
                     payload = resp.json()

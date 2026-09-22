@@ -127,7 +127,7 @@ class PrivySigningService:
         """Sign and broadcast a serialized Solana transaction.
 
         The user's delegated Solana wallet pays the network fee from its SOL
-        balance. ``sponsor`` is deliberately false: Floww never subsidizes it.
+        balance. ``sponsor`` is deliberately false: Kata never subsidizes it.
         """
         try:
             from kata.services.delegation_service import get_delegation_service

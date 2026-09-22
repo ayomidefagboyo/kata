@@ -50,9 +50,9 @@ class TransactionPrepareResponse(BaseModel):
     gas_estimate: Optional[str] = Field(None, description="Estimated gas limit")
     message: str = Field(..., description="Human readable description")
     chain_id: int = Field(default=8453, description="Base mainnet chain ID")
-    network: str = Field(default="Base", description="Canonical Floww balance network")
+    network: str = Field(default="Base", description="Canonical Kata balance network")
     fee_asset: str = Field(default="USDC", description="Asset used to pay the network fee")
-    fee_payer: str = Field(default="user", description="Floww does not sponsor withdrawal fees")
+    fee_payer: str = Field(default="user", description="Kata does not sponsor withdrawal fees")
 
 class DelegationPolicyRequest(BaseModel):
     """User-defined trading policy limits"""

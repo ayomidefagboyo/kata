@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Kata</title>
+  <desc id="desc">A rounded K monogram with a continuous learning loop.</desc>
+  <defs>
+    <linearGradient id="kata-surface" x1="70" y1="54" x2="438" y2="458" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1"/>
+      <stop offset="0.55" stop-color="#7456EE"/>
+      <stop offset="1" stop-color="#9945FF"/>
+    </linearGradient>
+    <linearGradient id="kata-ring" x1="306" y1="107" x2="223" y2="418" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E0E7FF" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#C4B5FD" stop-opacity="0.38"/>
+    </linearGradient>
+    <linearGradient id="kata-letter" x1="177" y1="119" x2="338" y2="389" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E0E7FF"/>
+    </linearGradient>
+    <radialGradient id="kata-light" cx="0" cy="0" r="1" gradientTransform="matrix(181 0 0 166 170 132)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="kata-shadow" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#312E81" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <g filter="url(#kata-shadow)">
+    <rect x="32" y="32" width="448" height="448" rx="132" fill="url(#kata-surface)"/>
+    <rect x="33" y="33" width="446" height="446" rx="131" fill="none" stroke="#FFFFFF" stroke-opacity="0.16" stroke-width="2"/>
+  </g>
+  <rect x="32" y="32" width="448" height="448" rx="132" fill="url(#kata-light)"/>
+  <!-- The quiet orbit stands for the feedback loop that makes Kata smarter after every trade. -->
+  <path d="M326 116C388 145 418 213 401 277C385 339 332 385 270 396C243 401 216 399 192 389" fill="none" stroke="url(#kata-ring)" stroke-linecap="round" stroke-width="14"/>
+  <path d="M192 389L214 365M192 389L222 396" fill="none" stroke="#DDE6FF" stroke-linecap="round" stroke-linejoin="round" stroke-width="13"/>
+  <!-- K: simple enough to recognise at favicon scale, soft enough to feel approachable. -->
+  <path d="M170 128V384M186 255L333 128M186 255L337 384" fill="none" stroke="url(#kata-letter)" stroke-linecap="round" stroke-linejoin="round" stroke-width="39"/>
+  <circle cx="373" cy="349" r="19" fill="#00D2FF"/>
+  <circle cx="367" cy="343" r="6" fill="#FFFFFF" fill-opacity="0.82"/>
+</svg>

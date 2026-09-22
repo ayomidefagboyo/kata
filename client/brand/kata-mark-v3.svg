@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Kata</title>
+  <desc id="desc">A restrained K monogram with a subtle decision gate.</desc>
+  <rect x="28" y="28" width="456" height="456" rx="112" fill="#143330"/>
+  <path d="M158 116C141 116 128 129 128 146V366C128 383 141 396 158 396C175 396 188 383 188 366V146C188 129 175 116 158 116Z" fill="#F5F0E6"/>
+  <path d="M190 226L298 116H380L252 248C245 255 245 266 252 273L384 396H300L190 286V226Z" fill="#F5F0E6"/>
+  <!-- The small aperture is a deliberate "gate": a quiet cue for Kata's risk checks. -->
+  <path d="M190 239L210 256L190 273Z" fill="#143330"/>
+</svg>

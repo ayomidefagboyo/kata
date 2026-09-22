@@ -103,7 +103,7 @@ CHAIN_CONFIGS = {
     }
 }
 
-# The user-visible Floww Balance is native USDC on Base. Yuki routes assigned
+# The user-visible Kata Balance is native USDC on Base. Yuki routes assigned
 # collateral to Hyperliquid internally, but that is not the deposit balance.
 PORTFOLIO_CHAIN_IDS = [8453]
 

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Kata</title>
+  <desc id="desc">A clear mint K monogram held inside a calm dark navy tile.</desc>
+
+  <!--
+    The tile is deliberately quiet: it gives the mark a stable, trusted presence
+    on a dark trading interface, while the open K stays legible at favicon size.
+  -->
+  <rect x="32" y="32" width="448" height="448" rx="124" fill="#102A35"/>
+  <rect x="34" y="34" width="444" height="444" rx="122" fill="none" stroke="#DFFFF4" stroke-opacity="0.18" stroke-width="2"/>
+
+  <!-- Strong, single-read K: a grounded stem, a clear decision point, and two calm paths. -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M164 132V380" stroke="#BDF5DC" stroke-width="48"/>
+    <path d="M190 256L344 124" stroke="#BDF5DC" stroke-width="48"/>
+    <path d="M190 256L344 388" stroke="#54D2B5" stroke-width="48"/>
+  </g>
+</svg>

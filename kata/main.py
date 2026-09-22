@@ -323,6 +323,22 @@ if client_dir.exists():
     async def serve_index():
         """Serve the Kata Autonomous Agent Cockpit web client."""
         return FileResponse(client_dir / "index.html")
+
+    @app.get("/manifest.json", include_in_schema=False)
+    async def serve_manifest():
+        """Serve the PWA web app manifest."""
+        manifest_path = client_dir / "manifest.json"
+        if manifest_path.exists():
+            return FileResponse(manifest_path, media_type="application/manifest+json")
+        return JSONResponse(status_code=404, content={"detail": "Not found"})
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    async def serve_favicon():
+        """Serve the brand favicon mark."""
+        favicon_path = client_dir / "brand" / "kata-mark-alt.svg"
+        if favicon_path.exists():
+            return FileResponse(favicon_path, media_type="image/svg+xml")
+        return JSONResponse(status_code=404, content={"detail": "Not found"})
 else:
     @app.get("/")
     async def root():
